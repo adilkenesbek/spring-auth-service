@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    username: demo
+    password: demo
+    url: jdbc:postgresql://localhost:5432/demo
+    driver-class-name: org.postgresql.Driver
+
+token:
+  signing:
+    key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
