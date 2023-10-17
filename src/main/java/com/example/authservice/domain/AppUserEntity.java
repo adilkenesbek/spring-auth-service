@@ -44,6 +44,7 @@ public class AppUserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return this.email;
     }
@@ -54,17 +55,20 @@ public class AppUserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
-        return true;
+        return !isBlocked;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return !isBlocked;
     }
 }

@@ -2,7 +2,9 @@ package com.example.authservice.security.service.impl;
 
 import com.example.authservice.domain.AppUserEntity;
 import com.example.authservice.domain.RoleEntity;
+import com.example.authservice.domain.dto.AppUserDTO;
 import com.example.authservice.domain.enam.Role;
+import com.example.authservice.domain.mapper.AppUserMapper;
 import com.example.authservice.repository.AppUserRepository;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.security.dto.JwtAuthenticationResponse;
@@ -27,30 +29,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AppUserMapper appUserMapper;
 
     @Override
     public ResponseEntity<JwtAuthenticationResponse> signup(SignUpRequest request) {
         RoleEntity role = roleRepository.findByName(Role.USER);
 
-        var user = AppUserEntity.builder()
+        AppUserEntity user = AppUserEntity.builder()
                 .email(request.getEmail())
                 .name(request.getName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Set.of(role))
                 .isBlocked(false)
                 .build();
-        appUserRepository.save(user);
+        user = appUserRepository.saveAndFlush(user);
+
         var jwt = jwtService.generateToken(user);
-        return ResponseEntity.ok(JwtAuthenticationResponse.builder().token(jwt).build());
+        return ResponseEntity.ok(
+                JwtAuthenticationResponse.builder()
+                        .user(appUserMapper.toDto(user))
+                        .token(jwt)
+                        .build());
     }
 
     @Override
     public ResponseEntity<JwtAuthenticationResponse> login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = appUserRepository.findByEmail(request.getEmail())
+        AppUserEntity user = appUserRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
         var jwt = jwtService.generateToken(user);
-        return ResponseEntity.ok(JwtAuthenticationResponse.builder().token(jwt).build());
+        return ResponseEntity.ok(
+                JwtAuthenticationResponse.builder()
+                        .user(appUserMapper.toDto(user))
+                        .token(jwt)
+                        .build());
     }
 }

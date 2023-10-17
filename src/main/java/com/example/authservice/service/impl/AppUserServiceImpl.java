@@ -1,6 +1,8 @@
 package com.example.authservice.service.impl;
 
 import com.example.authservice.domain.AppUserEntity;
+import com.example.authservice.domain.dto.AppUserDTO;
+import com.example.authservice.domain.mapper.AppUserMapper;
 import com.example.authservice.repository.AppUserRepository;
 import com.example.authservice.service.AppUserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.List;
 public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository appUserRepository;
+    private final AppUserMapper appUserMapper;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -24,7 +27,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public ResponseEntity<List<AppUserEntity>> getAll() {
-        return ResponseEntity.ok(appUserRepository.findAll());
+    public ResponseEntity<List<AppUserDTO>> getAll() {
+        return ResponseEntity.ok(appUserMapper.toDto(appUserRepository.findAll()));
     }
 }
