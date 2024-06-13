@@ -1,4 +1,4 @@
-package kz.pet.agato;
+package kz.pet.spliff;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

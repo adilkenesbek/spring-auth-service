@@ -1,4 +1,4 @@
-package kz.pet.agato.security.service;
+package kz.pet.spliff.security.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

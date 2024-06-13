@@ -1,4 +1,4 @@
-package kz.pet.agato.security.dto;
+package kz.pet.spliff.security.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRequest {
-    private String email;
+    private String username;
     private String password;
 }

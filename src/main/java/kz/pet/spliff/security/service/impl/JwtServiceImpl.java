@@ -1,6 +1,6 @@
-package kz.pet.agato.security.service.impl;
+package kz.pet.spliff.security.service.impl;
 
-import kz.pet.agato.security.service.JwtService;
+import kz.pet.spliff.security.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

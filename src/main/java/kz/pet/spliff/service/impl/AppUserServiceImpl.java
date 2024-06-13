@@ -1,9 +1,9 @@
-package kz.pet.agato.service.impl;
+package kz.pet.spliff.service.impl;
 
-import kz.pet.agato.domain.dto.AppUserDTO;
-import kz.pet.agato.domain.mapper.AppUserMapper;
-import kz.pet.agato.repository.AppUserRepository;
-import kz.pet.agato.service.AppUserService;
+import kz.pet.spliff.domain.dto.AppUserDTO;
+import kz.pet.spliff.domain.mapper.AppUserMapper;
+import kz.pet.spliff.repository.AppUserRepository;
+import kz.pet.spliff.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public UserDetailsService userDetailsService() {
-        return username -> appUserRepository.findByEmail(username).orElseThrow(
+        return username -> appUserRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("User not found!")
         );
     }

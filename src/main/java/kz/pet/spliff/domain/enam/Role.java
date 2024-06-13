@@ -1,5 +1,5 @@
-package kz.pet.agato.domain.enam;
+package kz.pet.spliff.domain.enam;
 
 public enum Role {
-    ADMIN, MANAGER, USER
+    ROLE_ADMIN, ROLE_MANAGER, ROLE_USER
 }

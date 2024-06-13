@@ -1,6 +1,6 @@
-package kz.pet.agato.domain.dto;
+package kz.pet.spliff.domain.dto;
 
-import kz.pet.agato.domain.enam.Role;
+import kz.pet.spliff.domain.enam.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 @Setter
 public class AppUserDTO {
     private Long id;
-    private String email;
+    private String username;
     private String name;
     private Set<Role> roles;
 }

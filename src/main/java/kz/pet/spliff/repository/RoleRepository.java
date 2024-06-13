@@ -1,7 +1,7 @@
-package kz.pet.agato.repository;
+package kz.pet.spliff.repository;
 
-import kz.pet.agato.domain.RoleEntity;
-import kz.pet.agato.domain.enam.Role;
+import kz.pet.spliff.domain.RoleEntity;
+import kz.pet.spliff.domain.enam.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

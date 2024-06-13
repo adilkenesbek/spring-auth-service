@@ -1,6 +1,6 @@
-package kz.pet.agato.service;
+package kz.pet.spliff.service;
 
-import kz.pet.agato.domain.dto.AppUserDTO;
+import kz.pet.spliff.domain.dto.AppUserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

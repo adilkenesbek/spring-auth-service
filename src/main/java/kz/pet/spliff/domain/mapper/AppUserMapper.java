@@ -1,10 +1,10 @@
-package kz.pet.agato.domain.mapper;
+package kz.pet.spliff.domain.mapper;
 
-import kz.pet.agato.domain.AppUserEntity;
-import kz.pet.agato.domain.RoleEntity;
-import kz.pet.agato.domain.dto.AppUserDTO;
-import kz.pet.agato.domain.enam.Role;
-import kz.pet.agato.repository.RoleRepository;
+import kz.pet.spliff.domain.AppUserEntity;
+import kz.pet.spliff.domain.RoleEntity;
+import kz.pet.spliff.domain.dto.AppUserDTO;
+import kz.pet.spliff.domain.enam.Role;
+import kz.pet.spliff.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class AppUserMapper implements EntityMapper<AppUserEntity, AppUserDTO> {
         AppUserDTO dto = new AppUserDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
+        dto.setUsername(entity.getUsername());
         Set<Role> roles = entity.getRoles().stream().map(RoleEntity::getName).collect(Collectors.toSet());
         dto.setRoles(roles);
         return dto;
@@ -34,7 +34,7 @@ public class AppUserMapper implements EntityMapper<AppUserEntity, AppUserDTO> {
     public AppUserEntity toEntity(AppUserDTO dto) {
         AppUserEntity entity = new AppUserEntity();
         entity.setId(dto.getId());
-        entity.setEmail(dto.getEmail());
+        entity.setUsername(dto.getUsername());
         entity.setName(dto.getName());
         Set<RoleEntity> roles = roleRepository.findAllByNameIn(dto.getRoles());
         entity.setRoles(roles);

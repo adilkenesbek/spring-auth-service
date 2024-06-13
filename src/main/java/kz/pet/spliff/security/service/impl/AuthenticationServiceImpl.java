@@ -1,16 +1,20 @@
-package kz.pet.agato.security.service.impl;
+package kz.pet.spliff.security.service.impl;
 
-import kz.pet.agato.domain.AppUserEntity;
-import kz.pet.agato.domain.RoleEntity;
-import kz.pet.agato.domain.enam.Role;
-import kz.pet.agato.domain.mapper.AppUserMapper;
-import kz.pet.agato.repository.AppUserRepository;
-import kz.pet.agato.repository.RoleRepository;
-import kz.pet.agato.security.dto.JwtAuthenticationResponse;
-import kz.pet.agato.security.dto.LoginRequest;
-import kz.pet.agato.security.dto.SignUpRequest;
-import kz.pet.agato.security.service.AuthenticationService;
-import kz.pet.agato.security.service.JwtService;
+import kz.pet.spliff.domain.AppUserEntity;
+import kz.pet.spliff.domain.RoleEntity;
+import kz.pet.spliff.domain.enam.Role;
+import kz.pet.spliff.domain.mapper.AppUserMapper;
+import kz.pet.spliff.handler.ErrorCode;
+import kz.pet.spliff.handler.ErrorResponse;
+import kz.pet.spliff.handler.exception.UserAlreadyExistsException;
+import kz.pet.spliff.repository.AppUserRepository;
+import kz.pet.spliff.repository.RoleRepository;
+import kz.pet.spliff.security.dto.JwtAuthenticationResponse;
+import kz.pet.spliff.security.dto.LoginRequest;
+import kz.pet.spliff.security.dto.SignUpRequest;
+import kz.pet.spliff.security.service.AuthenticationService;
+import kz.pet.spliff.security.service.JwtService;
+import kz.pet.spliff.utils.PasswordHashing.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +22,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 import java.util.Set;
+
+import static kz.pet.spliff.utils.PasswordHashing.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +40,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AppUserMapper appUserMapper;
 
     @Override
-    public ResponseEntity<JwtAuthenticationResponse> signup(SignUpRequest request) {
-        RoleEntity role = roleRepository.findByName(Role.USER);
+    //TODO: проверка на существующего пользователя
+    public ResponseEntity<JwtAuthenticationResponse> signup(SignUpRequest request) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Optional<AppUserEntity> existing = appUserRepository.findByUsername(request.getUsername());
+        existing.ifPresent(user -> {
+            throw new UserAlreadyExistsException(ErrorCode.ERROR_USER_ALREADY_EXISTS);
+        });
+        RoleEntity role = roleRepository.findByName(Role.ROLE_USER);
+        byte[] salt = generateSalt();
+        String hashedPassword = hashPassword(request.getPassword().toCharArray(), salt);
 
         AppUserEntity user = AppUserEntity.builder()
-                .email(request.getEmail())
+                .username(request.getUsername())
                 .name(request.getName())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .salt(toBase64(salt))
+//                .password(passwordEncoder.encode(request.getPassword()))
+                .password(hashedPassword)
                 .roles(Set.of(role))
                 .isBlocked(false)
                 .build();
@@ -52,11 +70,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<JwtAuthenticationResponse> login(LoginRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> login(LoginRequest request) throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+//        String hashedPassword = hashPassword(request.getPassword().toCharArray(), fromBase64(user.getSalt()));
+
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        AppUserEntity user = appUserRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        AppUserEntity user = appUserRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
         var jwt = jwtService.generateToken(user);
         return ResponseEntity.ok(
                 JwtAuthenticationResponse.builder()

@@ -1,4 +1,4 @@
-package kz.pet.agato.domain.mapper;
+package kz.pet.spliff.domain.mapper;
 
 import java.util.List;
 

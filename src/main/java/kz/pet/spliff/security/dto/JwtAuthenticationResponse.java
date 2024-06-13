@@ -1,6 +1,6 @@
-package kz.pet.agato.security.dto;
+package kz.pet.spliff.security.dto;
 
-import kz.pet.agato.domain.dto.AppUserDTO;
+import kz.pet.spliff.domain.dto.AppUserDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

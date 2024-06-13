@@ -1,7 +1,7 @@
-package kz.pet.agato.security.filters;
+package kz.pet.spliff.security.filters;
 
-import kz.pet.agato.security.service.JwtService;
-import kz.pet.agato.service.AppUserService;
+import kz.pet.spliff.security.service.JwtService;
+import kz.pet.spliff.service.AppUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userEmail;
+        final String username;
 
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
             filterChain.doFilter(request, response);
@@ -40,11 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUserName(jwt);
-        if (StringUtils.isNotEmpty(userEmail)
+        username = jwtService.extractUserName(jwt);
+        if (StringUtils.isNotEmpty(username)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = appUserService.userDetailsService()
-                    .loadUserByUsername(userEmail);
+                    .loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

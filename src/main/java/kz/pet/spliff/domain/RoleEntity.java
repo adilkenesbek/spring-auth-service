@@ -1,6 +1,6 @@
-package kz.pet.agato.domain;
+package kz.pet.spliff.domain;
 
-import kz.pet.agato.domain.enam.Role;
+import kz.pet.spliff.domain.enam.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "role")
+@Table(name = "app_role")
 public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
