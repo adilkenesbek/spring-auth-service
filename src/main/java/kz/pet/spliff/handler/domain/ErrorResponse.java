@@ -1,4 +1,4 @@
-package kz.pet.spliff.handler;
+package kz.pet.spliff.handler.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package kz.pet.spliff.security;
 import kz.pet.spliff.domain.AppUserEntity;
-import kz.pet.spliff.handler.ErrorCode;
+import kz.pet.spliff.handler.domain.ErrorCode;
 import kz.pet.spliff.repository.AppUserRepository;
 import kz.pet.spliff.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
