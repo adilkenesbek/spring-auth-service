@@ -23,6 +23,7 @@ public class AuthController {
     public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return authenticationService.login(loginRequest);
     }
+
     @PostMapping("/signup")
     public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody @Valid SignUpRequest signUpRequest) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return authenticationService.signup(signUpRequest);

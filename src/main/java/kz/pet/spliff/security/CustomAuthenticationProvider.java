@@ -1,5 +1,6 @@
 package kz.pet.spliff.security;
 import kz.pet.spliff.domain.AppUserEntity;
+import kz.pet.spliff.handler.ErrorCode;
 import kz.pet.spliff.repository.AppUserRepository;
 import kz.pet.spliff.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKeyFactory;
@@ -29,9 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String rawPassword = authentication.getCredentials().toString();
-
-//        UserDetails userDetails = appUserService.userDetailsService().loadUserByUsername(username);
-        AppUserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+        AppUserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException(ErrorCode.ERROR_BAD_CREDENTIALS));
 
         try {
             if (validatePassword(rawPassword, user.getPassword(), Base64.getDecoder().decode(user.getSalt()))) {
