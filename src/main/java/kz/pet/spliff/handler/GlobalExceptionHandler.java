@@ -3,6 +3,7 @@ package kz.pet.spliff.handler;
 import kz.pet.spliff.handler.exception.UserAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,11 +23,11 @@ public class GlobalExceptionHandler {
     public @ResponseBody ErrorResponse handleUserAlreadyExists(UserAlreadyExistsException ex) {
         return new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.name(), ex.getMessage());
     }
-//    @ExceptionHandler(value = UserAlreadyExistsException.class)
-//    @ResponseStatus(HttpStatus.CONFLICT)
-//    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex, WebRequest webRequest) {
-//        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.name(), ex.getMessage()));
-//    }
+    @ExceptionHandler(value = BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorResponse handleBadCredentials(BadCredentialsException ex) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage());
+    }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

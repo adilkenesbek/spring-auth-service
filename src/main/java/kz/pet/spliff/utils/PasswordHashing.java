@@ -1,11 +1,14 @@
 package kz.pet.spliff.utils;
 
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+
 
 public class PasswordHashing {
     // Method to generate a random salt
@@ -25,7 +28,7 @@ public class PasswordHashing {
 
         // Create PBEKeySpec with password, salt, iterations, and key length
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, keyLength);
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256.name());
         byte[] hash = keyFactory.generateSecret(spec).getEncoded();
 
         // Return the hashed password as a Base64 encoded string

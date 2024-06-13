@@ -30,12 +30,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String rawPassword = authentication.getCredentials().toString();
 
-        UserDetails userDetails = appUserService.userDetailsService().loadUserByUsername(username);
-        AppUserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException("User not found"));
+//        UserDetails userDetails = appUserService.userDetailsService().loadUserByUsername(username);
+        AppUserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 
         try {
             if (validatePassword(rawPassword, user.getPassword(), Base64.getDecoder().decode(user.getSalt()))) {
-                return new UsernamePasswordAuthenticationToken(username, rawPassword, userDetails.getAuthorities());
+                return new UsernamePasswordAuthenticationToken(username, rawPassword, user.getAuthorities());
             } else {
                 throw new BadCredentialsException("Invalid password");
             }
