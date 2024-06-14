@@ -38,7 +38,6 @@ public class GlobalExceptionHandler {
     public @ResponseBody ErrorResponse handleAccessDenied(AccessDeniedException ex) {
         return new ErrorResponse(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.name(), ex.getMessage());
     }
-
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody ErrorResponse handleValidationException(MethodArgumentNotValidException ex, WebRequest webRequest) {

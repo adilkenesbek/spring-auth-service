@@ -1,6 +1,5 @@
 package kz.pet.spliff.handler.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +25,4 @@ public class ErrorResponse {
         this.details = details;
         this.errors = errors;
     }
-
-
 }
