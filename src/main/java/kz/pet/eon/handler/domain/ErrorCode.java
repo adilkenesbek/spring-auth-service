@@ -6,4 +6,5 @@ public class ErrorCode {
     public static final String ERROR_VALIDATION_FAILED = "Validation Failed";
     public static final String ERROR_BAD_CREDENTIALS = "Invalid username or password";
     public static final String ERROR_TOKEN_EXPIRED = "JWT Token expired";
+    public static final String ERROR_INVALID_TOKEN = "JWT Token invalid";
 }

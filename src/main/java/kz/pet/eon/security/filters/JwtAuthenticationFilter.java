@@ -2,6 +2,7 @@ package kz.pet.eon.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import kz.pet.eon.handler.domain.ErrorCode;
 import kz.pet.eon.handler.domain.ErrorResponse;
 import kz.pet.eon.security.service.JwtService;
@@ -41,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String username;
 
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+            System.out.println("------------------NO TOKEN FOUND------------------");
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,7 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUserName(jwt);
         } catch (ExpiredJwtException ex) {
-            handleTokenExpirationException(response, ex.getMessage());
+            handleTokenExpirationException(response, ex.getMessage(), ErrorCode.ERROR_TOKEN_EXPIRED);
+            return;
+        } catch (JwtException ex) {
+            handleTokenExpirationException(response, ex.getMessage(), ErrorCode.ERROR_INVALID_TOKEN);
             return;
         }
         if (StringUtils.isNotEmpty(username)
@@ -69,10 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void handleTokenExpirationException(HttpServletResponse response, String message) throws IOException {
+    private void handleTokenExpirationException(HttpServletResponse response, String message, String errorMessage) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ErrorCode.ERROR_TOKEN_EXPIRED, message);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage, message);
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(jsonResponse);
     }

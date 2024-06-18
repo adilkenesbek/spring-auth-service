@@ -25,9 +25,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody ErrorResponse handleBadCredentials(BadCredentialsException ex) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage());
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.name(), ex.getMessage());
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
