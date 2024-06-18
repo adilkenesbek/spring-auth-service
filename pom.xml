@@ -8,7 +8,7 @@
         <version>3.1.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>kz.pet.spliff</groupId>
+    <groupId>kz.pet.eon</groupId>
     <artifactId>auth-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>auth-service</name>

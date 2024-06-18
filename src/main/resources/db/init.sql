@@ -29,4 +29,5 @@ CREATE TABLE rel_app_user_role
 -- Создание ролей
 insert into app_role (name)
 values ('ROLE_ADMIN'),
+       ('ROLE_MANAGER'),
        ('ROLE_USER');
