@@ -15,3 +15,4 @@ token:
   signing:
     key: ${SECRET_KEY}
 # change 1
+# change 2
